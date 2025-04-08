@@ -278,6 +278,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             productGrid.appendChild(productCard);
         });
+        
         // Update load more button visibility
         if (filteredProducts.length <= count) {
             loadMoreBtn.style.display = 'none';
@@ -604,19 +605,46 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Wishlist Buttons
-        document.querySelectorAll('.wishlist-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const productId = parseInt(this.dataset.id);
-                toggleWishlist(productId);
-                
-                const isWishlisted = wishlist.includes(productId);
-                showToast(
-                    isWishlisted ? 'Added to wishlist' : 'Removed from wishlist',
-                    isWishlisted ? 'success' : 'info'
-                );
-            });
-        });
-    }
+        // Wishlist Buttons - FULLY FIXED VERSION
+document.querySelectorAll('.wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        // 1. Prevent default behavior and stop event propagation
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        // 2. Get product ID with proper validation
+        const productId = parseInt(this.dataset.id);
+        if (isNaN(productId)) {
+            console.error('Invalid product ID:', this.dataset.id);
+            return;
+        }
+
+        // 3. Toggle wishlist status
+        const wasWishlisted = wishlist.includes(productId);
+        toggleWishlist(productId);
+        const isNowWishlisted = !wasWishlisted;
+
+        // 4. Visual feedback animation
+        const icon = this.querySelector('i');
+        icon.className = isNowWishlisted ? 'fas fa-heart' : 'far fa-heart';
+        
+        // Pulse animation
+        icon.style.transform = 'scale(1.3)';
+        setTimeout(() => {
+            icon.style.transform = 'scale(1)';
+        }, 300);
+
+        // 5. Show user feedback
+        showToast(
+            isNowWishlisted ? '❤️ Added to wishlist' : '💔 Removed from wishlist',
+            isNowWishlisted ? 'success' : 'info'
+        );
+
+        // 6. Update wishlist count immediately
+        updateWishlistUI();
+    });
+});}
     
     // Toast Notification
     const toast = document.querySelector('.toast');

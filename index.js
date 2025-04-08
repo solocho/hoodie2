@@ -244,45 +244,40 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             productCard.innerHTML = `
-                ${product.discount ? `<div class="product-badge">-${product.discount}%</div>` : ''}
-                ${product.isNew ? '<div class="product-badge" style="left: auto; right: 15px; background-color: #111;">New</div>' : ''}
-                
-                <div class="product-img">
-                    <img src="${product.image}" alt="${product.title}">
-                </div>
-                
+            ${product.discount ? `<div class="product-badge">-${product.discount}%</div>` : ''}
+            ${product.isNew ? '<div class="product-badge" style="left: auto; right: 15px; background-color: #111;">New</div>' : ''}
+            
+            <div class="product-img">
+                <img src="${product.image}" alt="${product.title}">
                 <div class="product-actions">
-                    <button class="action-btn quickview-btn" data-id="${product.id}">
-                        <i class="fas fa-eye"></i>
-                    </button>
                     <button class="action-btn wishlist-btn" data-id="${product.id}">
                         <i class="${product.isWishlisted ? 'fas' : 'far'} fa-heart"></i>
                     </button>
                 </div>
+            </div>
+            
+            <div class="product-content">
+                <span class="product-category">${product.category}</span>
+                <h3 class="product-title">${product.title}</h3>
                 
-                <div class="product-content">
-                    <span class="product-category">${product.category}</span>
-                    <h3 class="product-title">${product.title}</h3>
-                    
-                    <div class="product-price">
-                        <span class="current-price">$${product.price.toFixed(2)}</span>
-                        ${product.oldPrice ? `<span class="old-price">$${product.oldPrice.toFixed(2)}</span>` : ''}
-                    </div>
-                    
-                    <div class="product-rating">
-                        <div class="rating-stars">${stars.join('')}</div>
-                        <span class="rating-count">(${product.reviews})</span>
-                    </div>
-                    
-                    <button class="add-to-cart" data-id="${product.id}">
-                        <i class="fas fa-shopping-cart"></i> Add to Cart
-                    </button>
+                <div class="product-price">
+                    <span class="current-price">$${product.price.toFixed(2)}</span>
+                    ${product.oldPrice ? `<span class="old-price">$${product.oldPrice.toFixed(2)}</span>` : ''}
                 </div>
-            `;
+                
+                <div class="product-rating">
+                    <div class="rating-stars">${stars.join('')}</div>
+                    <span class="rating-count">(${product.reviews})</span>
+                </div>
+                
+                <button class="add-to-cart" data-id="${product.id}">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+            </div>
+        `;
             
             productGrid.appendChild(productCard);
         });
-        
         // Update load more button visibility
         if (filteredProducts.length <= count) {
             loadMoreBtn.style.display = 'none';

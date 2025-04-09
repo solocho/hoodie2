@@ -439,62 +439,73 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Update Wishlist UI
-    function updateWishlistUI() {
-        wishlistItemsContainer.innerHTML = '';
-        
-        if (wishlist.length === 0) {
-            wishlistItemsContainer.innerHTML = '<p class="empty-wishlist">Your wishlist is empty</p>';
-            wishlistCount.textContent = '0';
-            return;
-        }
-        
-        wishlist.forEach(id => {
-            const product = products.find(p => p.id === id);
-            
-            const wishlistItem = document.createElement('div');
-            wishlistItem.className = 'wishlist-item';
-            wishlistItem.dataset.id = id;
-            
-            wishlistItem.innerHTML = `
-                <div class="wishlist-item-img">
-                    <img src="KES{product.image}" alt="${product.title}">
-                </div>
-                <div class="wishlist-item-details">
-                    <h4 class="wishlist-item-title">${product.title}</h4>
-                    <div class="wishlist-item-price">KES${product.price.toFixed(2)}</div>
-                    <div class="wishlist-item-actions">
-                        <button class="wishlist-item-remove">
-                            <i class="fas fa-trash"></i> Remove
-                        </button>
-                        <button class="wishlist-item-cart">
-                            <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            wishlistItemsContainer.appendChild(wishlistItem);
-        });
-        
-        wishlistCount.textContent = wishlist.length;
-        
-        // Add event listeners to wishlist items
-        document.querySelectorAll('.wishlist-item-remove').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const productId = parseInt(this.closest('.wishlist-item').dataset.id);
-                removeFromWishlist(productId);
-            });
-        });
-        
-        document.querySelectorAll('.wishlist-item-cart').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const productId = parseInt(this.closest('.wishlist-item').dataset.id);
-                addToCart(productId);
-                showToast('Product added to cart', 'success');
-            });
-        });
+   // Update Wishlist UI
+function updateWishlistUI() {
+    wishlistItemsContainer.innerHTML = '';
+    
+    if (wishlist.length === 0) {
+        wishlistItemsContainer.innerHTML = '<p class="empty-wishlist">Your wishlist is empty</p>';
+        wishlistCount.textContent = '0';
+        return;
     }
     
+    wishlist.forEach(id => {
+        const product = products.find(p => p.id === id);
+        
+        if (!product) {
+            console.error(`Product with ID ${id} not found in products array`);
+            return;
+        }
+
+        // Create absolute path for images if they're relative
+        const imagePath = product.image.startsWith('http') ? 
+            product.image : 
+            `${window.location.origin}/${product.image.replace(/^\//, '')}`;
+        
+        const wishlistItem = document.createElement('div');
+        wishlistItem.className = 'wishlist-item';
+        wishlistItem.dataset.id = id;
+        
+        wishlistItem.innerHTML = `
+            <div class="wishlist-item-img">
+                <img src="${imagePath}" alt="${product.title}" 
+                     onerror="this.onerror=null;this.src='images/placeholder.jpg'">
+            </div>
+            <div class="wishlist-item-details">
+                <h4 class="wishlist-item-title">${product.title}</h4>
+                <div class="wishlist-item-price">KSh ${product.price.toFixed(2)}</div>
+                <div class="wishlist-item-actions">
+                    <button class="wishlist-item-remove">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                    <button class="wishlist-item-cart">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        wishlistItemsContainer.appendChild(wishlistItem);
+    });
+    
+    wishlistCount.textContent = wishlist.length;
+    
+    // Add event listeners to wishlist items
+    document.querySelectorAll('.wishlist-item-remove').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = parseInt(this.closest('.wishlist-item').dataset.id);
+            removeFromWishlist(productId);
+        });
+    });
+    
+    document.querySelectorAll('.wishlist-item-cart').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = parseInt(this.closest('.wishlist-item').dataset.id);
+            addToCart(productId);
+            showToast('Product added to cart', 'success');
+        });
+    });
+}
     // Add to Cart
     function addToCart(productId) {
         const existingItem = cart.find(item => item.id === productId);

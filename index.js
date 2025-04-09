@@ -261,8 +261,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h3 class="product-title">${product.title}</h3>
                 
                 <div class="product-price">
-                    <span class="current-price">$${product.price.toFixed(2)}</span>
-                    ${product.oldPrice ? `<span class="old-price">$${product.oldPrice.toFixed(2)}</span>` : ''}
+                    <span class="current-price">KES${product.price.toFixed(2)}</span>
+                    ${product.oldPrice ? `<span class="old-price">KES${product.oldPrice.toFixed(2)}</span>` : ''}
                 </div>
                 
                 <div class="product-rating">
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (cart.length === 0) {
             cartItemsContainer.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
-            cartTotal.textContent = '$0.00';
+            cartTotal.textContent = 'KES0.00';
             cartCount.textContent = '0';
             return;
         }
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="cart-item-details">
                     <h4 class="cart-item-title">${product.title}</h4>
-                    <div class="cart-item-price">$${(product.price * item.quantity).toFixed(2)}</div>
+                    <div class="cart-item-price">KES${(product.price * item.quantity).toFixed(2)}</div>
                     <button class="cart-item-remove">
                         <i class="fas fa-trash"></i> Remove
                     </button>
@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cartItemsContainer.appendChild(cartItem);
         });
         
-        cartTotal.textContent = `$${total.toFixed(2)}`;
+        cartTotal.textContent = `KES${total.toFixed(2)}`;
         cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
         
         // Add event listeners to cart items
@@ -455,11 +455,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             wishlistItem.innerHTML = `
                 <div class="wishlist-item-img">
-                    <img src="${product.image}" alt="${product.title}">
+                    <img src="KES{product.image}" alt="${product.title}">
                 </div>
                 <div class="wishlist-item-details">
                     <h4 class="wishlist-item-title">${product.title}</h4>
-                    <div class="wishlist-item-price">$${product.price.toFixed(2)}</div>
+                    <div class="wishlist-item-price">KES${product.price.toFixed(2)}</div>
                     <div class="wishlist-item-actions">
                         <button class="wishlist-item-remove">
                             <i class="fas fa-trash"></i> Remove
